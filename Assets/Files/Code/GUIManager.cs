@@ -4,13 +4,14 @@ using System.Collections;
 public class GUIManager : MonoBehaviour
 {
 	
+	IManager iManager;
 	IOManager ioManager;
 	
 	public GUISkin guiSkin;
 	Rect screenArea;
 	
 	string transactionName = "Transaction Name";
-	string transactionAmount = "00.00";
+	string transactionAmount = "000.00";
 	bool reoccurring = false;
 	
 	
@@ -19,6 +20,7 @@ public class GUIManager : MonoBehaviour
 		
 		screenArea = new Rect (0, 0, Screen.width, Screen.height);
 		
+		iManager = GameObject.FindGameObjectWithTag ( "IManager" ).GetComponent<IManager> ();
 		ioManager = GameObject.FindGameObjectWithTag ( "IOManager" ).GetComponent<IOManager> ();
 	}
 	
@@ -28,12 +30,14 @@ public class GUIManager : MonoBehaviour
 		
 		GUI.skin = guiSkin;
 	
-		GUI.Window ( 0, screenArea, TransactionWindow, "Top of Window" );
+		GUI.Window ( 0, new Rect ( screenArea.x, screenArea.y + 100, screenArea.width, screenArea.height - 100 ), TransactionWindow, "" );
 	}
 	
 	
 	void TransactionWindow ( int wID )
 	{
+		
+		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
 		
 		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2 - 10, 360, 160 ), "" );
 		

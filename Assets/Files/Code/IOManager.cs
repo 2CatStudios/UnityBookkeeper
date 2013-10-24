@@ -5,6 +5,8 @@ using System.Collections;
 //Written by M. Gibson Bethke
 public class IOManager : MonoBehaviour
 {
+	
+	IManager iManager;
 
 	static string mac = "/Users/" + Environment.UserName + "/Documents/UnityBookkeeper/";
 	static string windows = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UnityBookkeeper\\";
@@ -15,6 +17,8 @@ public class IOManager : MonoBehaviour
 	
 	void Start ()
 	{
+		
+		iManager = GameObject.FindGameObjectWithTag ( "IManager" ).GetComponent<IManager>();
 		
 		if(Environment.OSVersion.ToString().Substring (0, 4) == "Unix")
 		{
@@ -27,6 +31,15 @@ public class IOManager : MonoBehaviour
 		}
 		
 		logPath = path + "Transaction Log.txt";
+		
+		if ( File.Exists ( logPath ))
+		{
+			
+			iManager.transactionHistory = File.ReadAllText( logPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None );
+		} else {
+			
+			UnityEngine.Debug.Log ( "No file could be found" );
+		}
 	}
 	
 	
@@ -36,10 +49,30 @@ public class IOManager : MonoBehaviour
 		if ( !Directory.Exists ( path ))
 			Directory.CreateDirectory ( path );
 			
-		using ( StreamWriter writer = File.AppendText ( logPath )) 
+		double newBalance;
+		if ( transactionType == "Deposit" )
+			newBalance = iManager.balance + double.Parse ( transactionAmount );
+		else
+			newBalance = iManager.balance - double.Parse ( transactionAmount );
+			
+		UnityEngine.Debug.Log ( newBalance );
+		iManager.balance = newBalance;
+
+		if ( File.Exists ( logPath ))
 		{
 			
-			writer.WriteLine ( DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + transactionAmount + "|" + "New Total" );
+			using ( StreamWriter writer = File.AppendText ( logPath )) 
+			{
+				
+				writer.Write ( "\n" + DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + transactionAmount + "|" + newBalance );
+			}
+		} else {
+			
+			using ( StreamWriter writer = File.AppendText ( logPath )) 
+			{
+			
+				writer.Write ( DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + transactionAmount + "|" + transactionAmount );
+			}
 		}
 	}
 }
