@@ -8,7 +8,10 @@ public class GUIManager : MonoBehaviour
 	IOManager ioManager;
 	
 	public GUISkin guiSkin;
-	Rect screenArea;
+	internal Rect screenArea;
+	
+	internal Rect transactionWindowPosition;
+	internal Rect historyWindowPosition;
 	
 	string transactionName = "Transaction Name";
 	string transactionAmount = "000.00";
@@ -22,6 +25,9 @@ public class GUIManager : MonoBehaviour
 		
 		iManager = GameObject.FindGameObjectWithTag ( "IManager" ).GetComponent<IManager> ();
 		ioManager = GameObject.FindGameObjectWithTag ( "IOManager" ).GetComponent<IOManager> ();
+		
+		transactionWindowPosition = new Rect ( screenArea.x, screenArea.y + 100, screenArea.width, screenArea.height - 100 );
+		historyWindowPosition = new Rect ( screenArea.x, -screenArea.height + 100, screenArea.width, screenArea.height );
 	}
 	
 
@@ -30,7 +36,8 @@ public class GUIManager : MonoBehaviour
 		
 		GUI.skin = guiSkin;
 	
-		GUI.Window ( 0, new Rect ( screenArea.x, screenArea.y + 100, screenArea.width, screenArea.height - 100 ), TransactionWindow, "" );
+		GUI.Window ( 0, transactionWindowPosition, TransactionWindow, "" );
+		GUI.Window ( 1, historyWindowPosition, HistoryWindow, "" );
 	}
 	
 	
@@ -55,5 +62,12 @@ public class GUIManager : MonoBehaviour
 			
 			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring );
 		}
+	}
+	
+	
+	void HistoryWindow ( int wID )
+	{
+		
+		
 	}
 }
