@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 //Written by M. Gibson Bethke
 public class IOManager : MonoBehaviour
 {
@@ -12,7 +13,6 @@ public class IOManager : MonoBehaviour
 	static string windows = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UnityBookkeeper\\";
 	string path;
 	string logPath;
-	
 	
 	
 	void Start ()
@@ -35,7 +35,8 @@ public class IOManager : MonoBehaviour
 		if ( File.Exists ( logPath ))
 		{
 			
-			iManager.transactionHistory = File.ReadAllText( logPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None );
+			iManager.transactionHistory = new List<string> ( File.ReadAllText( logPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None ));
+			iManager.ReadLog ();
 		} else {
 			
 			UnityEngine.Debug.Log ( "No file could be found" );
@@ -54,8 +55,7 @@ public class IOManager : MonoBehaviour
 			newBalance = iManager.balance + double.Parse ( transactionAmount );
 		else
 			newBalance = iManager.balance - double.Parse ( transactionAmount );
-			
-		UnityEngine.Debug.Log ( newBalance );
+		
 		iManager.balance = newBalance;
 
 		if ( File.Exists ( logPath ))
@@ -73,6 +73,33 @@ public class IOManager : MonoBehaviour
 			
 				writer.Write ( DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + transactionAmount + "|" + transactionAmount );
 			}
+		}
+		
+		if ( File.Exists ( logPath ))
+		{
+			
+			iManager.transactionHistory = new List<string> ( File.ReadAllText( logPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None ));
+			iManager.ReadLog ();
+		}
+	}
+	
+	
+	public void ClearLog ()
+	{
+		
+		if ( File.Exists ( logPath ))
+		{
+			
+			File.Delete ( logPath );
+			
+			using ( StreamWriter writer = File.AppendText ( logPath )) 
+			{
+			
+				writer.Write ( iManager.transactionHistory[0] );
+				writer.Write ( "\n" + iManager.transactionHistory[0] );
+			}
+			
+			iManager.ReadLog ();
 		}
 	}
 }

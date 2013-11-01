@@ -7,6 +7,8 @@ public class GUIManager : MonoBehaviour
 	IManager iManager;
 	IOManager ioManager;
 	
+	public Texture2D line;
+	
 	public GUISkin guiSkin;
 	internal Rect screenArea;
 	
@@ -16,6 +18,8 @@ public class GUIManager : MonoBehaviour
 	string transactionName = "Transaction Name";
 	string transactionAmount = "000.00";
 	bool reoccurring = false;
+	
+	Vector2 scrollPosition = Vector2.zero;
 	
 	
 	void Start ()
@@ -45,22 +49,30 @@ public class GUIManager : MonoBehaviour
 	{
 		
 		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
-		
 		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2 - 10, 360, 160 ), "" );
 		
-		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2, 340, 60 ), transactionName, 16);
-		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 70, 170, 60 ), transactionAmount, 8);
+		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2, 340, 60 ), transactionName.Trim (), 16);
+		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 70, 170, 60 ), transactionAmount.Trim (), 8);
 		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2, 150, 60 ), "Deposit"))
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2, 150, 60 ), "Deposit" ))
 		{
 			
 			ioManager.NewTransaction ( "Deposit", transactionName, transactionAmount, reoccurring );
+			
+			transactionName = "Transaction Name";
+			transactionAmount = "000.00";
+			
+			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
 		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 + 70, 150, 60 ), "Withdraw"))
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 + 70, 150, 60 ), "Withdraw" ))
 		{
 			
 			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring );
+			transactionName = "Transaction Name";
+			transactionAmount = "000.00";
+			
+			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
 	}
 	
@@ -68,6 +80,32 @@ public class GUIManager : MonoBehaviour
 	void HistoryWindow ( int wID )
 	{
 		
+		if ( GUI.Button ( new Rect ( screenArea.width / 2 - 75, 10, 150, 40 ), "Clear Log" ))
+		{
+			
+			iManager.SendMessage ( "ClearLog" );
+		}
 		
+		GUILayout.BeginHorizontal ();
+		GUILayout.Space ( screenArea.width / 2 - 350 );
+		GUILayout.BeginVertical ();
+		GUILayout.Space ( 50 );
+		scrollPosition = GUILayout.BeginScrollView ( scrollPosition, GUILayout.Width( 700 ), GUILayout.Height ( 500 ));
+		
+		GUILayout.FlexibleSpace ();
+		
+		GUI.skin.label.fontSize = 16;
+		for ( int i = 0; i < iManager.transactionHistory.Count; i += 1 )
+		{
+			
+			GUILayout.Box ( iManager.transactionHistory[i] );
+		}
+		GUI.skin.label.fontSize = 40;
+		
+		GUI.EndScrollView();
+		GUILayout.EndVertical();
+		GUILayout.EndHorizontal();
+		
+		GUI.DrawTexture ( new Rect ( 0, screenArea.height - 35, screenArea.width, 10 ), line, ScaleMode.StretchToFill );
 	}
 }

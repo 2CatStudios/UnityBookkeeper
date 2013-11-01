@@ -31,13 +31,13 @@ public class PaneManager : MonoBehaviour
 	void Update()
 	{
 		
-		if ( popupBlocking == false && Input.GetKey ( KeyCode.UpArrow ) && currentPane == pane.historyWindow && moving == false )
+		if ( popupBlocking == false && Input.GetKey ( KeyCode.DownArrow ) && currentPane == pane.historyWindow && moving == false )
 		{
 			
 			moving = true;
 		}
 
-		if ( popupBlocking == false && Input.GetKey ( KeyCode.DownArrow ) && currentPane == pane.transactionWindow && moving == false )
+		if ( popupBlocking == false && Input.GetKey ( KeyCode.UpArrow ) && currentPane == pane.transactionWindow && moving == false )
 		{
 			
 			moving = true;
