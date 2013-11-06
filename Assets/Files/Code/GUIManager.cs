@@ -18,6 +18,7 @@ public class GUIManager : MonoBehaviour
 	string transactionName = "Transaction Name";
 	string transactionAmount = "000.00";
 	bool reoccurring = false;
+	float reoccurEveryDays = 1;
 	
 	Vector2 scrollPosition = Vector2.zero;
 	
@@ -49,28 +50,42 @@ public class GUIManager : MonoBehaviour
 	{
 		
 		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
-		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2 - 10, 360, 160 ), "" );
+		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2 - 100, 360, 160 ), "" );
 		
-		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2, 340, 60 ), transactionName.Trim (), 16);
-		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 70, 170, 60 ), transactionAmount.Trim (), 8);
+		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 90, 340, 60 ), transactionName.Trim (), 16);
+		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 5, 170, 60 ), transactionAmount.Trim (), 8);
 		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2, 150, 60 ), "Deposit" ))
+		reoccurring = GUI.Toggle ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 80, 100, 100 ), reoccurring, "");
+		GUI.Label ( new Rect ( screenArea.width/2 - 200, screenArea.height/2 + 100, 230, 60 ), "Reoccurring" );
+		
+		if ( reoccurring == true )
 		{
 			
-			ioManager.NewTransaction ( "Deposit", transactionName, transactionAmount, reoccurring );
+			GUI.Label ( new Rect ( screenArea.width/2 + 95, screenArea.height/2 + 70, 140, 60 ), reoccurEveryDays.ToString () + " Days" );
+			reoccurEveryDays = GUI.HorizontalSlider ( new Rect ( screenArea.width/2 + 20, screenArea.height/2 + 120, 310, 22 ), ( int ) reoccurEveryDays, 1.0F, 31.0F);
+		}
+		
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 - 85, 150, 60 ), "Deposit" ))
+		{
+			
+			ioManager.NewTransaction ( "Deposit", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );
 			
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
+			reoccurring = false;
+			reoccurEveryDays = 0.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
 		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 + 70, 150, 60 ), "Withdraw" ))
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 - 15, 150, 60 ), "Withdraw" ))
 		{
 			
-			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring );
+			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
+			reoccurring = false;
+			reoccurEveryDays = 0.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
@@ -87,10 +102,10 @@ public class GUIManager : MonoBehaviour
 		}
 		
 		GUILayout.BeginHorizontal ();
-		GUILayout.Space ( screenArea.width / 2 - 350 );
+		GUILayout.Space ( screenArea.width / 2 - 375 );
 		GUILayout.BeginVertical ();
 		GUILayout.Space ( 50 );
-		scrollPosition = GUILayout.BeginScrollView ( scrollPosition, GUILayout.Width( 700 ), GUILayout.Height ( 500 ));
+		scrollPosition = GUILayout.BeginScrollView ( scrollPosition, GUILayout.Width( 750 ), GUILayout.Height ( 500 ));
 		
 		GUILayout.FlexibleSpace ();
 		

@@ -44,7 +44,7 @@ public class IOManager : MonoBehaviour
 	}
 	
 	
-	public void NewTransaction ( string transactionType, string transactionName, string transactionAmount, bool reoccurring )
+	public void NewTransaction ( string transactionType, string transactionName, string transactionAmount, bool reoccurring, int reoccurEveryDays )
 	{
 		
 		if ( !Directory.Exists ( path ))
