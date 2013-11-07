@@ -73,7 +73,7 @@ public class GUIManager : MonoBehaviour
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
 			reoccurring = false;
-			reoccurEveryDays = 0.0F;
+			reoccurEveryDays = 1.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
@@ -81,11 +81,11 @@ public class GUIManager : MonoBehaviour
 		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 - 15, 150, 60 ), "Withdraw" ))
 		{
 			
-			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );
+			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );			
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
 			reoccurring = false;
-			reoccurEveryDays = 0.0F;
+			reoccurEveryDays = 1.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
