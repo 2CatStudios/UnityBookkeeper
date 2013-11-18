@@ -40,7 +40,7 @@ public class IOManager : MonoBehaviour
 			iManager.ReadLog ();
 		} else {
 			
-			UnityEngine.Debug.Log ( "No log file could be found." );
+//			UnityEngine.Debug.Log ( "No log file could be found." );
 		}
 	}
 	

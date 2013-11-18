@@ -7,6 +7,7 @@ public class IManager : MonoBehaviour
 {
 	
 	IOManager ioManager;
+	PaneManager paneManager;
 	
 	internal double balance = 0.0F;
 	internal List<String> transactionHistory;
@@ -16,6 +17,7 @@ public class IManager : MonoBehaviour
 	{
 		
 		ioManager = GameObject.FindGameObjectWithTag ( "IOManager" ).GetComponent<IOManager> ();
+		paneManager = GameObject.FindGameObjectWithTag ( "PaneManager" ).GetComponent<PaneManager> ();
 	}
 	
 	
@@ -28,8 +30,12 @@ public class IManager : MonoBehaviour
 			string[] lastBalance = transactionHistory[transactionHistory.Count - 1].Split('|');
 			balance = double.Parse ( lastBalance [5] );
 			
-			
+			paneManager.blocked = false;
+		} else {
+			paneManager.blocked = true;
 		}
+		
+		UnityEngine.Debug.Log ( paneManager.blocked );
 	}
 	
 	

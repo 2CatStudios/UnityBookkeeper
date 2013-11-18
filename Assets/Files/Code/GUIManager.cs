@@ -54,10 +54,11 @@ public class GUIManager : MonoBehaviour
 	void TransactionWindow ( int wID )
 	{
 		
+		GUI.skin.label.fontSize = 40;
 		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
 		
 		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2, 360, 160 ), "" );	
-		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 10, 340, 60 ), transactionName.Trim (), 16);
+		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 10, 340, 60 ), transactionName.TrimStart (), 16);
 		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 95, 170, 60 ), transactionAmount.Trim (), 8);
 		transactionAmount = RemoveDigits ( transactionAmount );
 		
@@ -87,32 +88,36 @@ public class GUIManager : MonoBehaviour
 	void HistoryWindow ( int wID )
 	{
 		
-		if ( GUI.Button ( new Rect ( screenArea.width / 2 - 75, 10, 150, 40 ), "Clear Log" ))
+		if ( iManager.transactionHistory != null )
 		{
+		
+			if ( GUI.Button ( new Rect ( screenArea.width / 2 - 75, 10, 150, 40 ), "Clear Log" ))
+			{
+				
+				iManager.SendMessage ( "ClearLog" );
+			}
 			
-			iManager.SendMessage ( "ClearLog" );
-		}
-		
-		GUILayout.BeginHorizontal ();
-		GUILayout.Space ( screenArea.width / 2 - 375 );
-		GUILayout.BeginVertical ();
-		GUILayout.Space ( 50 );
-		scrollPosition = GUILayout.BeginScrollView ( scrollPosition, GUILayout.Width( 750 ), GUILayout.Height ( 500 ));
-		
-		GUILayout.FlexibleSpace ();
-		
-		GUI.skin.label.fontSize = 16;
-		for ( int i = 0; i < iManager.transactionHistory.Count; i += 1 )
-		{
+			GUILayout.BeginHorizontal ();
+			GUILayout.Space ( screenArea.width / 2 - 375 );
+			GUILayout.BeginVertical ();
+			GUILayout.Space ( 50 );
+			scrollPosition = GUILayout.BeginScrollView ( scrollPosition, GUILayout.Width( 750 ), GUILayout.Height ( 500 ));
 			
-			GUILayout.Box ( iManager.transactionHistory[i] );
+			GUILayout.FlexibleSpace ();
+			
+			GUI.skin.label.fontSize = 16;
+			for ( int i = 0; i < iManager.transactionHistory.Count; i += 1 )
+			{
+				
+				GUILayout.Box ( iManager.transactionHistory[i] );
+			}
+			GUI.skin.label.fontSize = 40;
+			
+			GUI.EndScrollView();
+			GUILayout.EndVertical();
+			GUILayout.EndHorizontal();
+			
+			GUI.DrawTexture ( new Rect ( 0, screenArea.height - 35, screenArea.width, 10 ), line, ScaleMode.StretchToFill );
 		}
-		GUI.skin.label.fontSize = 40;
-		
-		GUI.EndScrollView();
-		GUILayout.EndVertical();
-		GUILayout.EndHorizontal();
-		
-		GUI.DrawTexture ( new Rect ( 0, screenArea.height - 35, screenArea.width, 10 ), line, ScaleMode.StretchToFill );
 	}
 }
