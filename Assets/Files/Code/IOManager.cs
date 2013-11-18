@@ -13,7 +13,6 @@ public class IOManager : MonoBehaviour
 	static string windows = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UnityBookkeeper\\";
 	string path;
 	string logPath;
-	string reoccurPath;
 	
 	
 	void Start ()
@@ -32,7 +31,7 @@ public class IOManager : MonoBehaviour
 		}
 		
 		logPath = path + "Transaction Log.txt";
-		reoccurPath = path + "Reoccurring Transactions.txt";
+
 		
 		if ( File.Exists ( logPath ))
 		{
@@ -43,20 +42,10 @@ public class IOManager : MonoBehaviour
 			
 			UnityEngine.Debug.Log ( "No log file could be found." );
 		}
-		
-		if ( File.Exists ( reoccurPath ))
-		{
-			
-			iManager.reoccurringTransactions = new List<String> ( File.ReadAllText( reoccurPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None ));
-			iManager.CheckReoccurring ();
-		} else {
-			
-			UnityEngine.Debug.Log ( "No reoccur file could be found." );
-		}
 	}
 	
 	
-	internal void NewTransaction ( string transactionType, string transactionName, string transactionAmount, bool reoccurring, int reoccurEveryDays )
+	internal void NewTransaction ( string transactionType, string transactionName, string transactionAmount )
 	{
 		
 		if ( !Directory.Exists ( path ))
@@ -68,31 +57,6 @@ public class IOManager : MonoBehaviour
 		else
 			newBalance = iManager.balance - double.Parse ( transactionAmount );
 		
-		string reoccur = "";
-		if ( reoccurring == true )
-		{
-			
-			reoccur = "Reoccurring(" + reoccurEveryDays + ")";
-			
-			string firstReoccurring = "";
-			if ( File.Exists ( reoccurPath ))
-				firstReoccurring = "\n";
-			else
-				firstReoccurring = "";
-			
-			using ( StreamWriter writer = File.AppendText ( reoccurPath )) 
-			{
-				
-				writer.Write ( firstReoccurring + DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + reoccur + "|" + transactionAmount + "|" + newBalance );
-			}
-			
-			iManager.reoccurringTransactions = new List<string> ( File.ReadAllText( reoccurPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None ));
-			iManager.CheckReoccurring ();
-		} else {
-			
-			reoccur = "Non-Reoccurring";
-		}
-		
 		string firstTransaction = "";
 		if ( File.Exists ( logPath ))
 			firstTransaction = "\n";
@@ -102,7 +66,7 @@ public class IOManager : MonoBehaviour
 		using ( StreamWriter writer = File.AppendText ( logPath )) 
 		{
 				
-			writer.Write ( firstTransaction + DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + reoccur + "|" + transactionAmount + "|" + newBalance );
+			writer.Write ( firstTransaction + DateTime.Today.ToString ( "D" ) + "|" + DateTime.Now.ToString ( "T" ) + "|" + transactionName + "|" + transactionType + "|" + transactionAmount + "|" + newBalance );
 		}
 		
 		iManager.transactionHistory = new List<string> ( File.ReadAllText( logPath ).Split( new string[] { "\r\n", "\n" }, StringSplitOptions.None ));

@@ -10,7 +10,6 @@ public class IManager : MonoBehaviour
 	
 	internal double balance = 0.0F;
 	internal List<String> transactionHistory;
-	internal List<String> reoccurringTransactions;
 
 	
 	void Start ()
@@ -27,7 +26,7 @@ public class IManager : MonoBehaviour
 		{
 		
 			string[] lastBalance = transactionHistory[transactionHistory.Count - 1].Split('|');
-			balance = double.Parse ( lastBalance [6] );
+			balance = double.Parse ( lastBalance [5] );
 			
 			
 		}
@@ -41,15 +40,7 @@ public class IManager : MonoBehaviour
 		{
 			
 			transactionHistory.RemoveRange ( 0, transactionHistory.Count - 2 );
-			
 			ioManager.ClearLog ();
 		}
-	}
-	
-	
-	internal void CheckReoccurring ()
-	{
-		
-		
 	}
 }

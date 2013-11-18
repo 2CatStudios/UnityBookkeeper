@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Text.RegularExpressions;
 //Written by M. Gibson Bethke
 public class GUIManager : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class GUIManager : MonoBehaviour
 	
 	string transactionName = "Transaction Name";
 	string transactionAmount = "000.00";
-	bool reoccurring = false;
-	float reoccurEveryDays = 1;
 	
 	Vector2 scrollPosition = Vector2.zero;
+	
+	public static string RemoveDigits ( string key )
+   	{
+				
+		return Regex.Replace ( key, "[^0-9.]", "" );
+  	 }
 	
 	
 	void Start ()
@@ -50,42 +55,29 @@ public class GUIManager : MonoBehaviour
 	{
 		
 		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
-		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2 - 100, 360, 160 ), "" );
 		
-		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 90, 340, 60 ), transactionName.Trim (), 16);
-		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 5, 170, 60 ), transactionAmount.Trim (), 8);
+		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2, 360, 160 ), "" );	
+		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 10, 340, 60 ), transactionName.Trim (), 16);
+		transactionAmount = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 95, 170, 60 ), transactionAmount.Trim (), 8);
+		transactionAmount = RemoveDigits ( transactionAmount );
 		
-		reoccurring = GUI.Toggle ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 80, 100, 100 ), reoccurring, "");
-		GUI.Label ( new Rect ( screenArea.width/2 - 200, screenArea.height/2 + 100, 230, 60 ), "Reoccurring" );
-		
-		if ( reoccurring == true )
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 + 15, 150, 60 ), "Deposit" ))
 		{
 			
-			GUI.Label ( new Rect ( screenArea.width/2 + 95, screenArea.height/2 + 70, 140, 60 ), reoccurEveryDays.ToString () + " Days" );
-			reoccurEveryDays = GUI.HorizontalSlider ( new Rect ( screenArea.width/2 + 20, screenArea.height/2 + 120, 310, 22 ), ( int ) reoccurEveryDays, 1.0F, 31.0F);
-		}
-		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 - 85, 150, 60 ), "Deposit" ))
-		{
-			
-			ioManager.NewTransaction ( "Deposit", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );
+			ioManager.NewTransaction ( "Deposit", transactionName, transactionAmount );
 			
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
-			reoccurring = false;
-			reoccurEveryDays = 1.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
 		
-		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 - 15, 150, 60 ), "Withdraw" ))
+		if ( GUI.Button ( new Rect ( screenArea.width/2 + 115, screenArea.height/2 + 85, 150, 60 ), "Withdraw" ))
 		{
 			
-			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount, reoccurring, ( int ) reoccurEveryDays );			
+			ioManager.NewTransaction ( "Withdraw", transactionName, transactionAmount );			
 			transactionName = "Transaction Name";
 			transactionAmount = "000.00";
-			reoccurring = false;
-			reoccurEveryDays = 1.0F;
 			
 			scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 		}
