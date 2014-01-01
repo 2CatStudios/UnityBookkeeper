@@ -34,8 +34,6 @@ public class IManager : MonoBehaviour
 		} else {
 			paneManager.blocked = true;
 		}
-		
-		UnityEngine.Debug.Log ( paneManager.blocked );
 	}
 	
 	

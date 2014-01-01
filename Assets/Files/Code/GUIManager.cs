@@ -21,6 +21,8 @@ public class GUIManager : MonoBehaviour
 	
 	Vector2 scrollPosition = Vector2.zero;
 	
+	internal int pane = 0;
+	
 	public static string RemoveDigits ( string key )
    	{
 				
@@ -38,6 +40,7 @@ public class GUIManager : MonoBehaviour
 		
 		transactionWindowPosition = new Rect ( screenArea.x, screenArea.y + 100, screenArea.width, screenArea.height - 100 );
 		historyWindowPosition = new Rect ( screenArea.x, -screenArea.height + 100, screenArea.width, screenArea.height );
+		scrollPosition = new Vector2 ( scrollPosition.x, Mathf.Infinity );
 	}
 	
 
@@ -48,6 +51,16 @@ public class GUIManager : MonoBehaviour
 	
 		GUI.Window ( 0, transactionWindowPosition, TransactionWindow, "" );
 		GUI.Window ( 1, historyWindowPosition, HistoryWindow, "" );
+		
+		if ( pane == 0 )
+		{
+			
+			GUI.FocusWindow ( 0 );
+		} else if ( pane == 1 )
+		{
+			
+			GUI.FocusWindow ( 1 );
+		}
 	}
 	
 	

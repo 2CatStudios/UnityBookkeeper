@@ -34,12 +34,14 @@ public class PaneManager : MonoBehaviour
 		{
 			
 			moving = true;
+			guiManager.pane = 0;
 		}
 
 		if ( blocked == false && Input.GetKey ( KeyCode.UpArrow ) && currentPane == pane.transactionWindow && moving == false )
 		{
 			
 			moving = true;
+			guiManager.pane = 1;
 		}
 
 			
