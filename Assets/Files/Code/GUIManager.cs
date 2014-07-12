@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
@@ -68,7 +69,7 @@ public class GUIManager : MonoBehaviour
 	{
 		
 		GUI.skin.label.fontSize = 40;
-		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: " + iManager.balance.ToString ());
+		GUI.Label ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 - 200, 600, 60 ), "Current Balance: $" + iManager.balance.ToString ( "000.00" ));
 		
 		GUI.Box ( new Rect ( screenArea.width/2 - 310, screenArea.height/2, 360, 160 ), "" );	
 		transactionName = GUI.TextField ( new Rect ( screenArea.width/2 - 300, screenArea.height/2 + 10, 340, 60 ), transactionName.TrimStart (), 16);

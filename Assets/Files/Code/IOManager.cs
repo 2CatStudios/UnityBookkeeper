@@ -9,8 +9,8 @@ public class IOManager : MonoBehaviour
 	
 	IManager iManager;
 
-	static string mac = "/Users/" + Environment.UserName + "/Documents/UnityBookkeeper/";
-	static string windows = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UnityBookkeeper\\";
+	static String mac = Path.DirectorySeparatorChar + "Users" + Path.DirectorySeparatorChar  + Environment.UserName + Path.DirectorySeparatorChar + "Library" + Path.DirectorySeparatorChar  + "Application Support" + Path.DirectorySeparatorChar + "2Cat Studios" + Path.DirectorySeparatorChar + "UnityBookkeeper" + Path.DirectorySeparatorChar;
+	static String windows = Environment.SpecialFolder.ApplicationData + Path.DirectorySeparatorChar  + "2Cat Studios" + Path.DirectorySeparatorChar + "UnityBookkeeper" + Path.DirectorySeparatorChar;
 	string path;
 	string logPath;
 	
@@ -40,7 +40,7 @@ public class IOManager : MonoBehaviour
 			iManager.ReadLog ();
 		} else {
 			
-//			UnityEngine.Debug.Log ( "No log file could be found." );
+			UnityEngine.Debug.Log ( "No log file could be found." );
 		}
 	}
 	
